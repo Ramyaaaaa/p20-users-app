@@ -45,13 +45,15 @@ addBoolToSF() async {
     
     final ThemeData theme = Theme.of(context);
     final TextStyle titleStyle =
-        theme.textTheme.title.copyWith(color: Colors.black);
+        theme.textTheme.title.copyWith(color: Colors.white);
     final TextStyle subheadStyle = theme.textTheme.subhead
-        .copyWith(color: Colors.black87, fontWeight: FontWeight.bold);
+        .copyWith(color: Colors.white, fontWeight: FontWeight.bold);
     final TextStyle descriptionStyle =
-        theme.textTheme.body1.copyWith(color: Colors.black54);
+        theme.textTheme.body1.copyWith(color: Colors.white);
         final EdgeInsetsGeometry textPadding = const EdgeInsets.only(bottom: 3.0);
     
+   List<Widget> getChildren(context)  {
+
   final List<Widget> children = <Widget>[
       Padding(
         padding: textPadding,
@@ -140,13 +142,27 @@ addBoolToSF() async {
                 {
                       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-                    bool hasAttended = await prefs.getBool('${event.id}') ?? false;
-                    if(!hasAttended) {
-                      Navigator.push(
+                    // bool hasAttended = await prefs.getBool('${event.id}') ?? false;
+                    // if(!hasAttended) {
+                   int attempts = 6;
+                       int startTime = await prefs.getInt(event.id.toString()+"time") ?? int.parse(event.duration);
+                       event.remainingTime = startTime.toString();
+                       print("In Details" + event.remainingTime);
+                       print("In Details attempts:" + attempts.toString());
+                     
+                    if(attempts != 0) {
+
+                      String value = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => QuestionPaperPage(event: event),
-          ),                   );
+          ),          
+                   );
+                   if (value != null) {
+                    final snackBar = SnackBar(content: Text(value,style : TextStyle(color: Colors.white)),backgroundColor: Colors.black,behavior: SnackBarBehavior.floating);
+                    // Find the Scaffold in the Widget tree and use it to show a SnackBar
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  }
                   
                       //  Navigator.of(context).push(MaterialPageRoute(builder: (context) => 
                       //  new QuestionPaperPage(event: event)));
@@ -185,7 +201,8 @@ addBoolToSF() async {
                     }
               
             
-            
+return children; 
+    }
     
     return 
     new Scaffold(
@@ -200,6 +217,9 @@ addBoolToSF() async {
             this.event.title,
           )),
           body:
+          Builder(builder : (context) => Center(
+      
+          child:
           SizedBox.expand(
             
           // height: MediaQuery.of(context).size.width * 0.65,
@@ -237,13 +257,13 @@ addBoolToSF() async {
             style: descriptionStyle,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: children,
+              children: getChildren(context),
             ),
           ),
         ),
       ],
     )
-    ));
+    ))));
     
   }
 

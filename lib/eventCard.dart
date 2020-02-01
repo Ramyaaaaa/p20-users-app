@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'results.dart';
 // import 'resultsPage.dart';
+import 'viewResults.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 import 'dart:convert';
@@ -9,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 
 class Event {
   final String title,
+      
       tagline,
       time,
       duration,
@@ -17,10 +20,14 @@ class Event {
       contact,
       image,
       teamSize,
-      id;
+      qrcode,
+        id;
+
+      String balanceTime;
   final Color color;
   Event({
     this.title,
+    
     this.tagline,
     this.time,
     this.duration,
@@ -30,8 +37,15 @@ class Event {
     this.image,
     this.teamSize,
     this.id,
+    this.qrcode,
     this.color,
   });
+  String get remainingTime => balanceTime;
+
+  set remainingTime(String remainingTime) {
+    balanceTime = remainingTime;
+  }
+
 }
 
 class EventCard extends StatelessWidget {
@@ -137,15 +151,31 @@ class EventCard extends StatelessWidget {
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
                 ),
                 textColor: Colors.white,
-                onPressed: () {
-                  Navigator.push(context,
-                      CupertinoPageRoute(builder: (context) {
-                    return new MaterialApp(
+                onPressed: () async {
+                String value = await Navigator.push(
+                    context,
+                    ResultsPageRoute(
                       title: event.title,
-                      home: new ResultsPage(title: event.title, id: event.id),
-                    );
-                  }));
-                }),
+                      id: event.id,
+                    ),
+                  );
+                  if (value != null) {
+                    final snackBar = SnackBar(content: Text(value,style : TextStyle(color: Colors.white)),backgroundColor: Colors.black,behavior: SnackBarBehavior.floating);
+                    // Find the Scaffold in the Widget tree and use it to show a SnackBar
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  }
+                
+              },
+                // onPressed: () {
+                //   Navigator.push(context,
+                //       CupertinoPageRoute(builder: (context) {
+                //     return new MaterialApp(
+                //       title: event.title,
+                //       home: new ResultsPage(title: event.title, id: event.id),
+                //     );
+                  
+                
+                ),
             
             
             ],

@@ -17,13 +17,24 @@ class QuestionPaperPage extends StatefulWidget {
   @override
   _QuestionPaperPageState createState() => _QuestionPaperPageState();
 }
+Future<bool> setAttendedMinus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  int value = await prefs.getInt(event.id.toString()+"chances") ?? 6;
+     return prefs.setInt(event.id.toString()+"chances", value-1);
+  }
+Future<bool> setAttended(int value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+     return prefs.setInt(event.id.toString()+"chances", value);
+  }
 bool displayQuestionPaper;
+bool checksecurity;
 class _QuestionPaperPageState extends State<QuestionPaperPage> {
  
   bool _isLoading;
   String scanCode;
   PDFDocument document;
+
 
   @override
   void initState() {
@@ -31,6 +42,7 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
     super.initState();
     event = widget.event;
     displayQuestionPaper = false;
+        checksecurity =  true;
     _isLoading = false;
   }
 
@@ -56,7 +68,7 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
       print(e);
     }
     print(scanCode);
-    if (scanCode == widget.event.id.toString()) {
+    if (scanCode == widget.event.qrcode.toString()) {
       print("Question paper");
       setState(() {
         displayQuestionPaper = true;
@@ -64,8 +76,10 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
       loadFromAssets();
     } else {
       print("Code didn't match");
+       print(widget.event.id.toString());
+     
       Fluttertoast.showToast(
-          msg: "Code did not match", toastLength: Toast.LENGTH_LONG);
+          msg: "QR Code did not match", toastLength: Toast.LENGTH_LONG);
     }
   }
   @override
@@ -139,8 +153,8 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
                     color: Color.fromRGBO(58, 66, 86, 1.0),
                     splashColor: Colors.black38,
                     onPressed: () => {
-                      setAttended(true),
-                      Navigator.pop(context),
+                      setAttended(0),
+                      Navigator.pop(context,'Test has ended!'),
                     },
                     child: new Text(
                       "End Test ",
@@ -219,10 +233,17 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
 //     );
 //   }
 // }
- Future<bool> setAttended(bool value) async {
+
+//  Future<bool> setAttended(bool value) async {
+//     final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+//     return prefs.setBool(event.id, value);
+//   }
+
+  Future<int> getAttended() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return prefs.setBool(event.id, value);
+    return  await prefs.getInt(event.id.toString()+"chances") ?? 6;
   }
  Future<bool> setStoppedTime(int value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -242,7 +263,7 @@ class TIMER extends StatefulWidget {
 
 int temp = 0;
 
-class _TIMERState extends State<TIMER> {
+class _TIMERState extends State<TIMER> with WidgetsBindingObserver{
   Timer _timer;
   int _start;
   int minutes;
@@ -253,17 +274,61 @@ class _TIMERState extends State<TIMER> {
   bool lessThanTenMin = false;
 
   int initiateTime = 0;
+bool isMoved;
   String scanCode;
   bool _isLoading, _isInit;
+ Future<int> getStoppedTime() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    _start = prefs.getInt(event.id.toString()+"time");
+    minutes = (_start ~/ 60);
+    seconds = (_start % 60);
+  
+    return _start;
+  }
 
   @override
   void initState() {
     super.initState();
+     WidgetsBinding.instance.addObserver(this);
+   
     _isInit = true;
-    _start = int.parse(event.duration);
-    minutes = (_start ~/ 60);
-    seconds = (_start % 60);
-    initiateTime = 0;
+    isMoved = false;
+    getStoppedTime();
+    // _start = int.parse(event.duration);
+      initiateTime = 0;
+  }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    switch(state){
+      case AppLifecycleState.paused:
+        print('paused state');
+        setAttendedMinus();
+       // isMoved = true;
+        Fluttertoast.showToast(
+            msg: "Go to full screen mode",
+            toastLength: Toast.LENGTH_LONG); 
+        break;
+      case AppLifecycleState.resumed:
+        print('resumed state');
+         isMoved = true;
+        break;
+      case AppLifecycleState.inactive:
+        print('inactive state');
+      //  isMoved = true;
+        Fluttertoast.showToast(
+            msg: "Go to full screen mode",
+            toastLength: Toast.LENGTH_LONG);
+		    
+         
+        break;
+      
+      case AppLifecycleState.detached:
+        print('detached state');
+        // TODO: Handle this case.
+        break;
+    }
   }
 
   
@@ -275,12 +340,19 @@ class _TIMERState extends State<TIMER> {
       oneSec,
       (timer) => setState(
         () {
+          if(isMoved)
+          {
+            timer.cancel();
+            setStoppedTime(minutes * 60 + seconds);
+            Navigator.pop(context,"Trying to switch tabs leads to disqualification!");
+          }
+          
           if (seconds < 1 && minutes == 0) {
             _isLoading = false;
             _isInit = true;
             lessThanTenSec = false;
             lessThanTenMin = false;
-            setAttended(true);
+            setAttended(0);
             timer.cancel();
             Navigator.pop(context);
             //  = true;
@@ -299,82 +371,83 @@ class _TIMERState extends State<TIMER> {
               lessThanTenMin = true;
             }
             seconds = seconds - 1;
-            if (seconds % 10 == 0) {
-              {
-                check();
-                if (g.offed == false) {
-                  timer.cancel();
-                  setStoppedTime(minutes * 60 + seconds);
-                }
-              }
-            }
+            // if (seconds % 10 == 0) {
+            //   {
+            //     check();
+            //     if (g.offed == false) {
+            //       timer.cancel();
+            //       setStoppedTime(minutes * 60 + seconds);
+            //     }
+            //   }
+            // }
           }
         },
       ),
     );
   }
 
-  check() async {
-    var result = await (Connectivity().checkConnectivity());
-    if (result == ConnectivityResult.mobile) {
-      if (g.chances >= 0)
-        Fluttertoast.showToast(
-            msg: "Turn off mobile data \n" +
-                "Warning! You are " +
-                g.chances.toString() +
-                " step away from disqualification",
-            toastLength: Toast.LENGTH_LONG);
-      else {
-        seconds = 0;
-        minutes = 0;
-        setAttended(true);
-        Navigator.pop(context);
-        displayQuestionPaper = false;
-        setStoppedTime(minutes * 60 + seconds);
-       // g.eventTime[g.eventIndex] = minutes * 60 + seconds;
-      }
-      g.offed = false;
-      temp = 0;
-      g.chances = g.chances - 1;
-      // Navigator.pushNamed(context, '/login');
-    } else if (result == ConnectivityResult.wifi) {
-      if (g.chances >= 0)
-        Fluttertoast.showToast(
-            msg: "Turn off wifi \n" +
-                "WARNING! You are " +
-                g.chances.toString() +
-                " step away from disqualification",
-            toastLength: Toast.LENGTH_LONG);
-      else {
-        seconds = 0;
-        minutes = 0;
-        setState((){
-        displayQuestionPaper = false;
-        });
-        setAttended(true);
+  // check() async {
+  //   var result = await (Connectivity().checkConnectivity());
+  //   if (result == ConnectivityResult.mobile) {
+  //     if (g.chances >= 0)
+  //       Fluttertoast.showToast(
+  //           msg: "Turn off mobile data \n" +
+  //               "Warning! You are " +
+  //               g.chances.toString() +
+  //               " step away from disqualification",
+  //           toastLength: Toast.LENGTH_LONG);
+  //     else {
+  //       seconds = 0;
+  //       minutes = 0;
+  //       setAttended(true);
+  //       Navigator.pop(context);
+  //       displayQuestionPaper = false;
+  //       setStoppedTime(minutes * 60 + seconds);
+  //      // g.eventTime[g.eventIndex] = minutes * 60 + seconds;
+  //     }
+  //     g.offed = false;
+  //     temp = 0;
+  //     g.chances = g.chances - 1;
+  //     // Navigator.pushNamed(context, '/login');
+  //   } else if (result == ConnectivityResult.wifi) {
+  //     if (g.chances >= 0)
+  //       Fluttertoast.showToast(
+  //           msg: "Turn off wifi \n" +
+  //               "WARNING! You are " +
+  //               g.chances.toString() +
+  //               " step away from disqualification",
+  //           toastLength: Toast.LENGTH_LONG);
+  //     else {
+  //       seconds = 0;
+  //       minutes = 0;
+  //       setState((){
+  //       displayQuestionPaper = false;
+  //       });
+  //       setAttended(true);
         
-        Navigator.pop(context);
-        setStoppedTime(minutes*60 + seconds);
-      //  g.eventTime[g.eventIndex] = minutes * 60 + seconds;
-      }
-      g.offed = false;
-      temp = 0;
-      g.chances = g.chances - 1;
-      // Navigator.pushNamed(context, '/login');
-    } else {
-      g.offed = true;
-      if (temp == 0) {
-        startTimer();
-        temp = 1;
-      }
-      print("HELLO" + g.offed.toString());
-    }
-  }
+  //       Navigator.pop(context);
+  //       setStoppedTime(minutes*60 + seconds);
+  //     //  g.eventTime[g.eventIndex] = minutes * 60 + seconds;
+  //     }
+  //     g.offed = false;
+  //     temp = 0;
+  //     g.chances = g.chances - 1;
+  //     // Navigator.pushNamed(context, '/login');
+  //   } else {
+  //     g.offed = true;
+  //     if (temp == 0) {
+  //       startTimer();
+  //       temp = 1;
+  //     }
+  //     print("HELLO" + g.offed.toString());
+  //   }
+  // }
 
   @override
   void dispose() {
     _timer.cancel();
-    super.dispose();
+  WidgetsBinding.instance.removeObserver(this);
+      super.dispose();
   }
 
   @override

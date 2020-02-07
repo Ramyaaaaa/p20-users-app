@@ -64,9 +64,8 @@ class _ResultsPageState extends State<ResultsPage>
   Widget build(BuildContext context) {
     // teamDetails.forEach((a) => print(a.memberList()));
     return Scaffold(
-       backgroundColor: Color.fromRGBO(58, 66, 86, 0.7),
-         
       
+       backgroundColor: Color.fromRGBO(58, 66, 86, 0.8),
       appBar: AppBar(
         elevation: 7,
           backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
@@ -126,6 +125,7 @@ class ResultsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     // final TextStyle textStyle = this.team.style;
     final TextStyle textStyle = TextStyle(color: Colors.white);
 

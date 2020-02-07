@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "691500567382",
+    "firebase_url": "https://prayatna20-98646.firebaseio.com",
+    "project_id": "prayatna20-98646",
+    "storage_bucket": "prayatna20-98646.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691500567382:android:225013657993cb889f64f7",
+        "android_client_info": {
+          "package_name": "com.example.new_p20_users_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691500567382-9vvjfmvinkmugbnvusjgijd6b6nvcnrc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.new_p20_users_app",
+            "certificate_hash": "02755657c4163e2f5965ea60a6706bd846058d7c"
+          }
+        },
+        {
+          "client_id": "691500567382-diq15ptd1g3297bnqd6at42omlu87l1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC83GssjikewLGlhcmFviGNGtqFVsXrLWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691500567382-diq15ptd1g3297bnqd6at42omlu87l1l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_plugin_pdf_viewer/flutter_plugin_pdf_viewer.dart';
-import 'globals.dart' as g;
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'eventCard.dart';
@@ -18,15 +16,15 @@ class QuestionPaperPage extends StatefulWidget {
   _QuestionPaperPageState createState() => _QuestionPaperPageState();
 }
 Future<bool> setAttendedMinus() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-  int value = await prefs.getInt(event.id.toString()+"chances") ?? 6;
-     return prefs.setInt(event.id.toString()+"chances", value-1);
-  }
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  int value = await prefs.getInt(event.id.toString()+"chances") ?? 3;
+    return prefs.setInt(event.id.toString()+"chances", value-1);
+}
 Future<bool> setAttended(int value) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setInt(event.id.toString()+"chances", value);
+}
 
-     return prefs.setInt(event.id.toString()+"chances", value);
-  }
 bool displayQuestionPaper;
 bool checksecurity;
 class _QuestionPaperPageState extends State<QuestionPaperPage> {
@@ -42,7 +40,7 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
     super.initState();
     event = widget.event;
     displayQuestionPaper = false;
-        checksecurity =  true;
+    checksecurity =  true;
     _isLoading = false;
   }
 
@@ -82,6 +80,31 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
           msg: "QR Code did not match", toastLength: Toast.LENGTH_LONG);
     }
   }
+
+  Future submitConfirm() async
+  {
+    return showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                contentTextStyle: TextStyle(color: Colors.blue,fontWeight: FontWeight.bold),
+                backgroundColor: Colors.black,
+                content: Text('Are you sure ?'),
+                actions: <Widget>[
+                  new FlatButton(
+
+                    onPressed: () {
+                      setAttended(0); 
+                      Navigator.of(context).popUntil((route) => route.isFirst);
+
+                    }, child: new Text('Confirm')),
+                  new FlatButton(onPressed: () => Navigator.pop(context), child: new Text('Cancel'))
+                  ],
+              );
+            },
+          );
+  }
+
   @override
   Widget build(BuildContext context) {
     return  WillPopScope(
@@ -100,7 +123,7 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
               Fluttertoast.showToast(
                   msg: "Test in progress",
                   toastLength: Toast.LENGTH_SHORT,
-                  backgroundColor: Colors.grey,
+                  backgroundColor: Colors.black,
                   textColor: Colors.white);
             }
           },
@@ -130,7 +153,7 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
                 : new Padding(padding: new EdgeInsets.all(25.0)),
             !displayQuestionPaper
                 ? new MaterialButton(
-                    minWidth: 100.0,
+                   minWidth: 100.0,
                     height: 25.0,
                     padding: const EdgeInsets.all(25.0),
                     textColor: Colors.white,
@@ -153,8 +176,9 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
                     color: Color.fromRGBO(58, 66, 86, 1.0),
                     splashColor: Colors.black38,
                     onPressed: () => {
-                      setAttended(0),
-                      Navigator.pop(context,'Test has ended!'),
+                      
+
+                      submitConfirm(),
                     },
                     child: new Text(
                       "End Test ",
@@ -170,80 +194,10 @@ class _QuestionPaperPageState extends State<QuestionPaperPage> {
   }
 }
 
-// class _MainState extends State<Main> {
-//   loadFromAssets() async {
-//     setState(() {
-//       _isInit = false;
-//       _isLoading = true;
-//     });
-//     document = await PDFDocument.fromAsset('assets/amz.pdf');
-//     setState(() {
-//       _isLoading = false;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-// leading: IconButton(
-//   icon: Icon(Icons.arrow_back),
-//   color: Colors.white,
-//   onPressed: () {
-//     // if (initiateTime == 0)
-//       // Navigator.pushNamed(context, '/login');
-//     // else {
-//       Fluttertoast.showToast(
-//           msg: "Test in progress",
-//           toastLength: Toast.LENGTH_SHORT,
-//           backgroundColor: Colors.grey,
-//           textColor: Colors.white);
-//     // }
-//   },
-// ),
-//         title: Text(g.events[g.eventIndex]),
-//         actions: <Widget>[
-//           _isInit == true
-//               ? IconButton(
-//                   icon: Icon(Icons.settings_overscan),
-//                   onPressed: () {
-//                     scanQR();
-//                   },
-//                 )
-//               : TIMER(),
-//         ],
-//       ),
-//       body: Column(
-//         children: <Widget>[
-//           Expanded(
-//             child: Center(
-//               child: _isInit
-//                   ? Text("Press button to load")
-//                   : _isLoading
-//                       ? Center(
-//                           child: CircularProgressIndicator(),
-//                         )
-//                       : PDFViewer(
-//                           document: document,
-//                         ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-//  Future<bool> setAttended(bool value) async {
-//     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-//     return prefs.setBool(event.id, value);
-//   }
-
   Future<int> getAttended() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return  await prefs.getInt(event.id.toString()+"chances") ?? 6;
+    return  await prefs.getInt(event.id.toString()+"chances") ?? 3;
   }
  Future<bool> setStoppedTime(int value) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -277,15 +231,6 @@ class _TIMERState extends State<TIMER> with WidgetsBindingObserver{
 bool isMoved;
   String scanCode;
   bool _isLoading, _isInit;
- Future<int> getStoppedTime() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    _start = prefs.getInt(event.id.toString()+"time");
-    minutes = (_start ~/ 60);
-    seconds = (_start % 60);
-  
-    return _start;
-  }
 
   @override
   void initState() {
@@ -294,8 +239,10 @@ bool isMoved;
    
     _isInit = true;
     isMoved = false;
-    getStoppedTime();
-    // _start = int.parse(event.duration);
+    _start = int.parse(event.remainingTime);
+  minutes = (_start ~/ 60);
+    seconds = (_start % 60);
+   
       initiateTime = 0;
   }
   @override
@@ -360,7 +307,7 @@ bool isMoved;
             
           } else {
             if (seconds == 0 && minutes != 0) {
-              minutes = minutes - 1;
+               minutes = minutes - 1;
               seconds = 60;
               lessThanTenSec = false;
             }
@@ -371,77 +318,12 @@ bool isMoved;
               lessThanTenMin = true;
             }
             seconds = seconds - 1;
-            // if (seconds % 10 == 0) {
-            //   {
-            //     check();
-            //     if (g.offed == false) {
-            //       timer.cancel();
-            //       setStoppedTime(minutes * 60 + seconds);
-            //     }
-            //   }
-            // }
+            
           }
         },
       ),
     );
   }
-
-  // check() async {
-  //   var result = await (Connectivity().checkConnectivity());
-  //   if (result == ConnectivityResult.mobile) {
-  //     if (g.chances >= 0)
-  //       Fluttertoast.showToast(
-  //           msg: "Turn off mobile data \n" +
-  //               "Warning! You are " +
-  //               g.chances.toString() +
-  //               " step away from disqualification",
-  //           toastLength: Toast.LENGTH_LONG);
-  //     else {
-  //       seconds = 0;
-  //       minutes = 0;
-  //       setAttended(true);
-  //       Navigator.pop(context);
-  //       displayQuestionPaper = false;
-  //       setStoppedTime(minutes * 60 + seconds);
-  //      // g.eventTime[g.eventIndex] = minutes * 60 + seconds;
-  //     }
-  //     g.offed = false;
-  //     temp = 0;
-  //     g.chances = g.chances - 1;
-  //     // Navigator.pushNamed(context, '/login');
-  //   } else if (result == ConnectivityResult.wifi) {
-  //     if (g.chances >= 0)
-  //       Fluttertoast.showToast(
-  //           msg: "Turn off wifi \n" +
-  //               "WARNING! You are " +
-  //               g.chances.toString() +
-  //               " step away from disqualification",
-  //           toastLength: Toast.LENGTH_LONG);
-  //     else {
-  //       seconds = 0;
-  //       minutes = 0;
-  //       setState((){
-  //       displayQuestionPaper = false;
-  //       });
-  //       setAttended(true);
-        
-  //       Navigator.pop(context);
-  //       setStoppedTime(minutes*60 + seconds);
-  //     //  g.eventTime[g.eventIndex] = minutes * 60 + seconds;
-  //     }
-  //     g.offed = false;
-  //     temp = 0;
-  //     g.chances = g.chances - 1;
-  //     // Navigator.pushNamed(context, '/login');
-  //   } else {
-  //     g.offed = true;
-  //     if (temp == 0) {
-  //       startTimer();
-  //       temp = 1;
-  //     }
-  //     print("HELLO" + g.offed.toString());
-  //   }
-  // }
 
   @override
   void dispose() {

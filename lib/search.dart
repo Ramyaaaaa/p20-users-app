@@ -18,8 +18,17 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   ThemeData appBarTheme(BuildContext context) {
-        
-    return ThemeData(backgroundColor: Color.fromRGBO(58, 66, 86, 1.0), cursorColor: Colors.white, hintColor: Colors.white, textSelectionColor: Colors.white);
+
+  final ThemeData theme = Theme.of(context);
+    return theme.copyWith(
+      primaryColor: Color.fromRGBO(58, 66, 86, 1.0),
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.white),
+      primaryColorBrightness: Brightness.dark,
+      textTheme: theme.textTheme.copyWith(
+        title: TextStyle(fontWeight: FontWeight.normal,color: Colors.black),
+        body1: TextStyle(fontWeight: FontWeight.normal,color: Colors.black)
+      ),
+    );
   }
   @override
   Widget buildLeading(BuildContext context) {
@@ -33,7 +42,9 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return new ListView.separated(
+
+    return
+    ListView.separated(
       itemCount: resultsList.length + 1,
       itemBuilder: (BuildContext context, int index) {
         if (resultsList.length >= 1) {
@@ -42,10 +53,10 @@ class DataSearch extends SearchDelegate<String> {
               padding: const EdgeInsets.only(top: 10, bottom: 10),
               child: ResultsContent(
                 team: Team(
-                  rank: 'Rank',
+                  teamID: 'Team ID',
                   members: <String>['Team Members'],
                   marks: 'Score',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             );
@@ -61,21 +72,26 @@ class DataSearch extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
+
+     
     resultsList = [];
     if (query.isNotEmpty) {
       for (var index = 0; index < teamDetails.length; index++) {
         List<dynamic> memberList = teamDetails[index].memberList();
-        print(memberList);
+        // print(memberList);
         memberList.forEach((member) {
           
-          if (member['name'].toLowerCase().startsWith(query) && member['name'] != null) {
-            resultsList.add(index);
+          if (member['name'].toLowerCase().startsWith(query.toLowerCase()) && member['name'] != null) {
+            if(!resultsList.contains(index))
+              resultsList.add(index);
           }
         });
       }
       resultsList.toSet().toList();
 
-      return new ListView.separated(
+      return Container(
+        color: Color.fromRGBO(58, 66, 86, 1.0),
+      child : ListView.separated(
         itemCount: resultsList.length + 1,
         itemBuilder: (BuildContext context, int index) {
           if (resultsList.length >= 1) {
@@ -85,11 +101,10 @@ class DataSearch extends SearchDelegate<String> {
                 child: ResultsContent(
                   team: Team(
                     teamID: 'Team ID',
-                    // rank: 'Rank',
                     members: <String>['Team Members'],
                     marks: 'Score',
-                    style: TextStyle(color: Colors.white),
-                ),
+                    style: Theme.of(context).textTheme.subtitle,
+                  ),
                 ),
               );
             }
@@ -98,9 +113,13 @@ class DataSearch extends SearchDelegate<String> {
           }
         },
         separatorBuilder: (BuildContext context, int index) {
-          return Divider();
+          if(index == 0)
+                return Divider(color: Colors.white,thickness: 0.5);
+                else 
+                return Divider(color: Colors.white);
+                
         },
-      );
+      ));
     } else {
       return Text("");
     }

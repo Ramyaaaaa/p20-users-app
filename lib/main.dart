@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'eventCard.dart';
 import 'eventDetails.dart';
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+
+ BuildContext context;
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
@@ -20,35 +21,36 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatelessWidget {
+
   HomePage({Key key, this.title}) : super(key: key);
+
+ 
   final String title;
 
   final techEvents = <Event>[
     Event(
-      title: 'Amazon Intern Hiring',
-      id: 'amz',
-      tagline: 'Win Internships at Amazon!',
-      time: 'Feb 8, 9am - 12:30pm (Prelims)',
-      duration: '120',
+      title: 'C Noobies',
+      id: 'cnob',
+      tagline: 'Dive into the magic of C',
+      time: 'Feb 9, 9am - 12:30pm (Prelims)',
+      duration: '2700',
       venue: 'LHC',
-      contact: '9442248023',
-      image: 'assets/images/amazon-intern-hiring.jpg',
-      teamSize: 'Individual participation',
-      qrcode: 'amz',
-      color: Colors.orange.shade100,
+      contact: '9444948968',
+      image: 'assets/images/cnob.jpg',
+      teamSize: 'Max. 2 members, only for First Years',
+      qrcode: 'R9UswyX6>9)nN}R\$',
      ),
      Event(
       title: 'Hexathlon',
       id: 'hex',
-      tagline: 'Mega Event',
-      time: 'Mar 8, 9am - 12:30pm (Prelims)',
+      tagline: 'The Mega Event',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
       duration: '2700',
       venue: 'LHC',
       contact: '9698654157',
-      image: 'assets/images/flutter.jpg',
-      teamSize: 'Excatly 2 per team',
-      qrcode: 'P20xeh!*2080',
-      color: Colors.teal.shade100,
+      image: 'assets/images/hex.jpg',
+      teamSize: 'Exactly 2 per team',
+      qrcode: '[k,me6g3MGbUM-As',
     ),
     Event(
       title: 'OSPC',
@@ -57,230 +59,237 @@ class HomePage extends StatelessWidget {
       time: 'Feb 8, 9am - 12:30pm (Prelims)',
       duration: '2700',
       venue: 'LHC',
-      contact: '8056027690',
-      image: 'assets/images/ospc.png',
+      contact: '9600867345',
+      image: 'assets/images/ospc.jpg',
       teamSize: 'Max. 2 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.blue.shade100,
-    
+      qrcode: "@#'6<&sW5UFT)~pW",
     ),
-    
     Event(
       title: "DB Dwellers",
       id: 'dbd',
       tagline: 'Select * from the universe',
-      time: 'Mar 8, 9am - 12:30pm (Prelims)',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
       duration: '2700',
       venue: 'LHC',
       contact: '8608217957',
-      image: 'assets/images/db-dwellers.jpg',
+      image: 'assets/images/dbd.jpg',
       teamSize: 'Max. 2 per team',
-      qrcode: 'P20dbd!*2080',
-      color: Colors.brown.shade100,
+      qrcode: '>ny]djSv\$yt#2C&]',
     ),
     Event(
-      title: "Parseltongue",
+      title: "Python",
       id: 'python',
       tagline: 'Express your fluency in Python',
-      time: 'Mar 9, 9am - 12:30pm (Prelims)',
+      time: 'Feb 9, 9am - 12:30pm (Prelims)',
       duration: '2700',
       venue: 'LHC',
       contact: '9655066244',
-      image: 'assets/images/parseltongue.jpg',
+      image: 'assets/images/python.jpg',
       teamSize: 'Max. 2 per team',
-      qrcode: 'P20nohtyp!*2080',
-      color: Colors.orange.shade100,
+      qrcode: "7Ws5k2B]'C-r^6=y",
     ),
     Event(
       title: 'Web Hub',
       id: 'web',
       tagline: "What you see is what you get",
-      time: 'Mar 8, 9am - 12:30pm (Prelims)',
-      duration: '120',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
+      duration: '2700',
       venue: 'LHC',
-      contact: '9962396478',
-      image: 'assets/images/web-hub.jpg',
+      contact: '9500960760',
+      image: 'assets/images/web.jpg',
       teamSize: 'Max. 2 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.green.shade100,
+      qrcode: '6kv%4CUdT,PEwE&Z',
     ),
    
     Event(
       title: "Coffee with Java",
       id: 'java',
       tagline: 'Are you a jaw-dropping Java developer?',
-      time: 'Mar 9, 9am - 1pm (Prelims)',
-      duration: '120',
+      time: 'Feb 9, 9am - 12:30pm (Prelims)',
+      duration: '2700',
       venue: 'LHC',
-      contact: '9940191782',
-      image: 'assets/images/oops-its-java.jpg',
+      contact: '8939021336',
+      image: 'assets/images/java.jpg',
       teamSize: 'Max. 2 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.orange.shade100,
+      qrcode: 'ww9@#mCdWc`n[=-H',
+    ),
+    
+    Event(
+      title: "Think-a-thon",
+      id: 'think',
+      tagline: 'A battle of wits!',
+      time: 'Feb 9, 9am - 10:30pm (Prelims)',
+      duration: '2700',
+      venue: 'LHC',
+      contact: '8675955857',
+      image: 'assets/images/think.jpg',
+      teamSize: 'Max. 2 per team',
+      qrcode: 'S6Kp[F+/Dh~\$vRj>',
     ),
   ];
 
   final nonTechEvents = <Event>[
     Event(
-      title: 'Kaleidoscope',
+      title: 'Prestige',
+      duration: '2100',
+      id: 'pres',
       tagline: 'The Mega Event',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
       venue: 'LHC',
-      contact: '9087907515',
-      image: 'assets/images/kaleidoscope.jpg',
-      teamSize: 'Individual participation',
-      qrcode: 'cpso!*2080',
-      color: Colors.green.shade100,
+      contact: '8825772487',
+      image: 'assets/images/pres.jpg',
+      teamSize: 'Max. 3 per team',
+      qrcode: "x%s4yB4'L-[.^`j",
     ),
     Event(
       title: 'IPL Auction',
       tagline: 'Bid, Win, Have a Grin',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
       venue: 'LHC',
-      contact: '7871615411',
-      image: 'assets/images/ipl-auction.jpg',
+      id : 'ipl',
+      duration: '1800',
+      contact: '9629847329',
+      image: 'assets/images/ipl.jpg',
       teamSize: 'Max. 2 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.blue.shade100,
+      qrcode: '7[(UC66+VL5tEt7[',
     ),
     Event(
-      title: "Gaming",
+      title: "Sherlock Holmes",
+      duration: '2100',
       tagline: 'Life is short, Game more',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
       venue: 'LHC',
-      contact: '8903426741',
-      image: 'assets/images/gaming.png',
-      teamSize: 'Individual Participation',
-      qrcode: 'cpso!*2080',
-      color: Colors.grey.shade400,
+      id : 'sheh',
+      contact: '9629847329',
+      image: 'assets/images/sheh.jpg',
+      teamSize: 'Max. of 3 members',
+      qrcode: "JE8A'bd7)Yx-}a>;",
     ),
     Event(
       title: "Connexions",
+      id : 'conn',
+      duration: '2700',
       tagline: 'Crack it quicker and collar up as connectors',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      time: 'Feb 9, 9am - 12:30pm (Prelims)',
       venue: 'LHC',
-      contact: '9566146252',
-      image: 'assets/images/connexions.png',
-      teamSize: 'Max. 2 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.red.shade100,
-    ),
-    Event(
-      title: 'BPlan',
-      tagline: "It's always wise to look ahead",
-      time: 'Mar 9, 9am - 1pm (Prelims)',
-      venue: 'LHC',
-      contact: '9500504137',
-      image: 'assets/images/bplan.jpg',
-      teamSize: 'Max. 2 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.blue.shade100,
+      contact: '8015888316',
+      image: 'assets/images/conn.jpg',
+      teamSize: 'Exactly 2 per team',
+      qrcode: '%4U<=J<#GrK2Zr7~',
     ),
     Event(
       title: "Treasure Hunt",
       tagline: 'Clear Vision holds the key',
-      time: 'Mar 9, 9am - 1pm (Prelims)',
+      time: 'Feb 8, 9am - 12:30pm (Prelims)',
       venue: 'LHC',
-      contact: '9171889661',
-      image: 'assets/images/treasure-hunt.jpg',
+      duration: '2400',
+      id : 'thunt',
+      contact: '9489079110',
+      image: 'assets/images/thunt.jpg',
       teamSize: 'Max. 3 per team',
-      qrcode: 'cpso!*2080',
-      color: Colors.amber.shade100,
+      qrcode: 'eB<\<&JSD,%p3`3J',
     ),
     Event(
       title: 'Math O Mania',
+      id : 'math',
       tagline: 'Do you speak the language of the Gods?',
-      time: 'Mar 9, 9am - 1pm (Prelims)',
+      time: 'Feb 9, 9am - 12:30pm (Prelims)',
       venue: 'LHC',
-      contact: '8072843284',
-      image: 'assets/images/math-o-mania.jpg',
+      contact: '7092694272',
+      duration: '2100',
+      image: 'assets/images/math.jpg',
       teamSize: 'Max. 2 per team',
-       qrcode: 'cpso!*2080',
-      color: Colors.grey.shade400,
+       qrcode: 'c2e/`fMF45*e(*p\$',
+    ),
+     
+    Event(
+      title: "GQuiz",
+      id: 'gquiz',
+      tagline: 'Do you read news ?',
+      time: 'Feb 8, 9am - 10:30pm (Prelims)',
+      duration: '1200',
+      venue: 'LHC',
+      contact: '8825772487',
+      image: 'assets/images/gquiz.jpg',
+      teamSize: 'Exactly 2 per team',
+      qrcode: '/(92#GD(;\$g&v<NP',
     ),
   ];
   final workshops = <Event>[
     Event(
-      title: 'Kaleidoscope',
-      tagline: 'The Mega Event',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      title: 'Amazon Web Services',
+      id : 'aws',
+      tagline: 'Learn to deploy applications in a scalable way',
+      time: 'Feb 8, 9am - 4pm',
       venue: 'LHC',
-      contact: '9087907515',
-      image: 'assets/images/kaleidoscope.jpg',
+      contact: '‎9080667260',
+      image: 'assets/images/w_aws.jpg',
       teamSize: 'Individual participation',
-       qrcode: 'cpso!*2080',
-      color: Colors.green.shade100,
     ),
     Event(
-      title: 'IPL Auction',
-      tagline: 'Bid, Win, Have a Grin',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      title: 'Digging into Data',
+      tagline: 'Master the Future',
+      time: 'Feb 8, 9am - 4pm',
+      id: 'data',
       venue: 'LHC',
-      contact: '7871615411',
-      image: 'assets/images/ipl-auction.jpg',
-      teamSize: 'Max. 2 per team',
-       qrcode: 'cpso!*2080',
-      color: Colors.blue.shade100,
+      contact: '‎9080667260',
+      image: 'assets/images/w_data.jpg',
+      teamSize: 'Individual participation',
     ),
     Event(
-      title: "Gaming",
-      tagline: 'Life is short, Game more',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      title: "Artificial Intelligence",
+      id:'aiml',
+      tagline: 'You choose how to use the AI tool',
+      time: 'Feb 8, 9am - 4pm',
       venue: 'LHC',
-      contact: '8903426741',
-      image: 'assets/images/gaming.png',
+      contact: '‎9080667260',
+      image: 'assets/images/w_aiml.jpg',
       teamSize: 'Individual Participation',
-       qrcode: 'cpso!*2080',
-      color: Colors.grey.shade400,
     ),
     Event(
-      title: "Connexions",
-      tagline: 'Crack it quicker and collar up as connectors',
-      time: 'Mar 8, 9am - 1pm (Prelims)',
+      title: "Web Development",
+      tagline: 'Bring out the creative side in you',
+      time: 'Feb 8, 9am - 4pm',
+      id : 'web',
       venue: 'LHC',
-      contact: '9566146252',
-      image: 'assets/images/connexions.png',
-      teamSize: 'Max. 2 per team',
-       qrcode: 'cpso!*2080',
-      color: Colors.red.shade100,
+      contact: '‎9080667260',
+      image: 'assets/images/w_web.jpg',
+      teamSize: 'Individual participation',
     ),
     Event(
-      title: 'BPlan',
-      tagline: "It's always wise to look ahead",
-      time: 'Mar 9, 9am - 1pm (Prelims)',
+      title: 'Ethical Hacking',
+      tagline: "Be a WHITE HAT HACKER in no time",
+      time: 'Feb 9, 9am - 4pm',
+      id : 'hack',
       venue: 'LHC',
-      contact: '9500504137',
-      image: 'assets/images/bplan.jpg',
-      teamSize: 'Max. 2 per team',
-       qrcode: 'cpso!*2080',
-      color: Colors.blue.shade100,
+      contact: '‎9080667260',
+      image: 'assets/images/w_hack.jpg',
+      teamSize: 'Individual participation',
     ),
     Event(
-      title: "Treasure Hunt",
-      tagline: 'Clear Vision holds the key',
-      time: 'Mar 9, 9am - 1pm (Prelims)',
+      title: "App Development",
+      tagline: 'Design apps like Instagram, your style, your way',
+      time: 'Feb 8, 9am - 4pm',
+      id : 'app',
       venue: 'LHC',
-      contact: '9171889661',
-      image: 'assets/images/treasure-hunt.jpg',
-      teamSize: 'Max. 3 per team',
-       qrcode: 'cpso!*2080',
-      color: Colors.amber.shade100,
+      contact: '‎9080667260',
+      image: 'assets/images/w_app.jpg',
+      teamSize: 'Individual participation',
     ),
     Event(
-      title: 'Math O Mania',
-      tagline: 'Do you speak the language of the Gods?',
-      time: 'Mar 9, 9am - 1pm (Prelims)',
+      title: 'Deep Learning',
+      tagline: 'Break into AI via Deep Learning',
+      time: 'Feb 9, 9am - 4pm',
+      id:'deep',
       venue: 'LHC',
-      contact: '8072843284',
-      image: 'assets/images/math-o-mania.jpg',
-      teamSize: 'Max. 2 per team',
-       qrcode: 'cpso!*2080',
-      color: Colors.grey.shade400,
+      contact: '‎9080667260',
+      image: 'assets/images/w_deep.jpg',
+      teamSize: 'Individual participation',
     ),
   ];
 
   final String techEventsTitle = 'Tech Events',
-      nonTechEventsTitle = 'Non Tech Events',
+      nonTechEventsTitle = 'Non Tech ',
       workshopTitle = 'Workshops';
   @override
   Widget build(BuildContext context) {
@@ -288,7 +297,6 @@ class HomePage extends StatelessWidget {
       length: 3,
       child: Scaffold(
         backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
-
         appBar: AppBar(
           elevation: 7,
           backgroundColor: Color.fromRGBO(58, 66, 86, 1.0),
@@ -296,37 +304,50 @@ class HomePage extends StatelessWidget {
             this.title,
           ),
           bottom: TabBar(
-            indicatorColor: Color.fromRGBO(78, 87, 92, 0.9),
+            indicatorColor: Colors.white10,
             indicatorWeight: 4,
             tabs: [
               new Tab(
-                text: techEventsTitle,
+                child: 
+                Text(
+                  techEventsTitle,
+                  softWrap: true,
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.width/24)
+                )
               ),
               new Tab(
-                text: nonTechEventsTitle,
+                child: 
+                Text(
+                  nonTechEventsTitle,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.width/24)
+                )
               ),
               new Tab(
-                text: workshopTitle,
+                child: 
+                Text(
+                  workshopTitle,
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.width/24)
+                )
               ),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            
             ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return EventCard(
                   event: techEvents[index],
+                  viewResults: true,
                   onTap: () {
                     Navigator.push(
                       context,
                       DetailsPageRoute(
                         techEvents[index],
                         showResults: true,
-                        
                       ),
                     );
                   },
@@ -338,12 +359,13 @@ class HomePage extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return EventCard(
                   event: nonTechEvents[index],
+                  viewResults: false,
                   onTap: () {
-
                     Navigator.push(
                       context,
                       DetailsPageRoute(
-                        nonTechEvents[index]
+                        nonTechEvents[index],
+                        showResults: true
                       ),
                     );
                   },
@@ -356,6 +378,7 @@ class HomePage extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return EventCard(
                   event: workshops[index],
+                  viewResults: false,
                   onTap: () {
                     Navigator.push(
                       context,
@@ -368,9 +391,8 @@ class HomePage extends StatelessWidget {
               },
               itemCount: workshops.length,
             ),
-          ],
+           ],
         ),
-          
       ),
     );
   }
